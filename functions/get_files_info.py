@@ -1,21 +1,19 @@
 import os
+from functions.valid_path import is_valid_path
 
 
 def get_files_info(working_directory, directory='.'):
      try:
-          # abs path of working directory
-          absolute_path = os.path.abspath(working_directory)
-          target_path = os.path.normpath(os.path.join(absolute_path, directory))
-          print(absolute_path)
+          # helper fn to check if target_path is within working path
+          valid_dir, target_path = is_valid_path(working_directory, directory)
 
-          valid_target_dir = os.path.commonpath([target_path, absolute_path]) == absolute_path
 
           if directory == '.':
                print(f"Result for current directory")
           else:
                print(f"Result for '{directory}' directory")
           
-          if not valid_target_dir:
+          if not valid_dir:
                return f'    Error: Cannot list "{directory}" as it is outside the permitted working directory'
 
           if not os.path.isdir(target_path):
@@ -54,4 +52,4 @@ def get_files_info(working_directory, directory='.'):
 
 #      return '\n'.join(return_info)
 
-print(get_files_info('calculator', 'pkg'))
+print(get_files_info('calculator'))
