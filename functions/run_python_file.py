@@ -2,7 +2,7 @@ import os
 from functions.valid_path import is_valid_path
 import subprocess
 
-def run_python_file(working_directory, file_path, args=None):
+def run_python_file(working_directory='calculator', file_path='main.py', args=None):
      try:
           absolute_file_p = os.path.abspath(working_directory)
           is_valid, target_p = is_valid_path(working_directory, file_path)
@@ -16,8 +16,10 @@ def run_python_file(working_directory, file_path, args=None):
           
           # fixing target_p to be the cwd as intended
           command=['python', target_p]
+
           if args:
                command.extend(args)
+
           result = subprocess.run(command, capture_output=True, text=True, timeout=30, cwd=working_directory)
 
           message = []
@@ -32,8 +34,6 @@ def run_python_file(working_directory, file_path, args=None):
                message.append(f"STDERR: {result.stderr}")
 
           return '\n'.join(message)
-
-
 
      except Exception as e:
           return f"Error: executing Python file: {e}"
