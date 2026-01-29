@@ -3,11 +3,12 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from prompts import *
+from call_functions import schema_get_files_info
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key)
-
 
 def main():
      print("Hello from ai-chatbot!")
@@ -25,10 +26,18 @@ def main():
 
      messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
 
-     answer = client.models.generate_content(model='gemini-2.5-flash', contents=messages)
+     # original answer generated from calling Gemini-AI
+     # answer = client.models.generate_content(model='gemini-2.5-flash', contents=messages)
+
+     available_functions = types.Tool(
+          function_declarations=[schema_get_files_info],
+     )
+
+     answer = client.models.generate_content(model='gemini-2.5-flash', contents=messages, config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt))
+
+
      prompt_t_count = answer.usage_metadata.prompt_token_count
      candidates_t_count = answer.usage_metadata.candidates_token_count
-
 
      if args.verbose:
           if prompt_t_count is None:
@@ -37,7 +46,11 @@ def main():
           print(f"Prompt tokens: {prompt_t_count}")
           print(f"Response tokens: {candidates_t_count}")
 
-     print(answer.text)
+     if answer.function_calls:
+          for function in answer.function_calls:
+               print(f"Calling function: {function.name}({function.args})")
+     else:
+          print(answer.text)
 
 
 
