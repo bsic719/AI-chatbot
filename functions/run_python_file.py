@@ -2,7 +2,7 @@ import os
 from functions.valid_path import is_valid_path
 import subprocess
 
-def run_python_file(working_directory='calculator', file_path='main.py', args=None):
+def run_python_file(working_directory, file_path, args=None):
      try:
           absolute_file_p = os.path.abspath(working_directory)
           is_valid, target_p = is_valid_path(working_directory, file_path)

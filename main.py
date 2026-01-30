@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from prompts import *
-from call_functions import schema_get_files_info
+from call_functions import *
 
 load_dotenv()
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -30,11 +30,10 @@ def main():
      # answer = client.models.generate_content(model='gemini-2.5-flash', contents=messages)
 
      available_functions = types.Tool(
-          function_declarations=[schema_get_files_info],
+          function_declarations=[schema_get_files_info, schema_get_file_contents, schema_run_python_file, schema_write_file_contents]
      )
 
      answer = client.models.generate_content(model='gemini-2.5-flash', contents=messages, config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt))
-
 
      prompt_t_count = answer.usage_metadata.prompt_token_count
      candidates_t_count = answer.usage_metadata.candidates_token_count
