@@ -57,3 +57,17 @@ class Calculator:
         b = values.pop()
         a = values.pop()
         values.append(self.operators[operator](a, b))
+
+import sys
+
+if __name__ == "__main__":
+    calculator = Calculator()
+    if len(sys.argv) > 1:
+        expression = " ".join(sys.argv[1:])
+        try:
+            result = calculator.evaluate(expression)
+            print(result)
+        except ValueError as e:
+            print(f"Error: {e}")
+    else:
+        print("Usage: python calculator.py <expression>")

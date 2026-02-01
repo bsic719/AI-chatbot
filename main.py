@@ -47,10 +47,10 @@ def main():
           response_token_ct = ai_response.usage_metadata.candidates_token_count
 
           function_responses = []
-          # if args.verbose:
-          #      print(f"User prompt: {args.user_prompt}")
-          #      print(f"Prompt tokens: {prompt_token_ct}")
-          #      print(f"Response tokens: {response_token_ct}")
+          if args.verbose:
+               print(f"User prompt: {args.user_prompt}")
+               print(f"Prompt tokens: {prompt_token_ct}")
+               print(f"Response tokens: {response_token_ct}")
 
           print('\nResponse:')
           if ai_response.function_calls == None:
