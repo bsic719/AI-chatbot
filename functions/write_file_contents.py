@@ -1,5 +1,25 @@
 import os
 from functions.valid_path import is_valid_path
+from google.genai import types
+
+schema_write_file_contents = types.FunctionDeclaration(
+     name='write_file',
+     description='Locate a file and write/overwrite its contents',
+     parameters=types.Schema(
+          type=types.Type.OBJECT,
+          properties={
+               'file_path':types.Schema(
+                    type=types.Type.STRING,
+                    description='the path to the file we are locating to write over if appropriate'
+               ),
+               'content':types.Schema(
+                    type=types.Type.STRING,
+                    description='if provided, it is the content we are writing into the file, otherwise the default content will be "hi"'
+               )
+          },
+          required=['file_path']
+     )
+)
 
 def write_file(working_directory, file_path, content='hi'):
      try:

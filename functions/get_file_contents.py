@@ -1,8 +1,24 @@
 import os
 from functions.valid_path import is_valid_path
 from config import *
+from google.genai import types
 
-def get_file_content(working_directory, file_path):
+schema_get_file_contents = types.FunctionDeclaration(
+     name='get_file_contents',
+     description='reads the contents of a file relative to the working directory and returns the contents',
+     parameters=types.Schema(
+          type=types.Type.OBJECT,
+          properties={
+               'file_path': types.Schema(
+                    type=types.Type.STRING,
+                    description='File path to read from, relative to working path'
+               )
+          },
+          required=['file_path']
+     ),
+)
+
+def get_file_contents(working_directory, file_path):
      try:
           # abs_path = os.path.abspath(working_directory)
           # reading_file_path = os.path.normpath(os.path.join(abs_path, file_path))

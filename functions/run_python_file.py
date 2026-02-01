@@ -1,6 +1,30 @@
 import os
 from functions.valid_path import is_valid_path
 import subprocess
+from google.genai import types
+
+schema_run_python_file = types.FunctionDeclaration(
+     name = 'run_python_file',
+     description = 'Runs a python file and perform the commands that is passed along',
+     parameters=types.Schema(
+          type=types.Type.OBJECT,
+          properties={
+               'file_path': types.Schema(
+                    type=types.Type.STRING,
+                    description='The file we want to try and run the commands with'
+               ),
+               'args': types.Schema(
+                    type=types.Type.ARRAY,
+                    description='If there are any, the commands which will be extended be executed outside of the pre-assigned commands',
+                    items=types.Schema(
+                         type=types.Type.STRING,
+                         description='the singular command we are adding to the list of commands',
+                    )
+               )
+          },
+          required = ['file_path']
+     )
+)
 
 def run_python_file(working_directory, file_path, args=None):
      try:
